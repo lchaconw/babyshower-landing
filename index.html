@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Evento - Selección de Regalos</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+    crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+  <div class="container mt-5">
+    <!-- Banner Section -->
+    <div class="text-center mb-5">
+      <img src="images/carousel.png" class="img-fluid" alt="Evento Banner">
+    </div>
+
+    <!-- Event Info Section -->
+    <div class="event-info text-center">
+      <h1>Baby Shower</h1>
+      <div class="subtitle">En honor a los padres</div>
+      <div class="subtitle"><strong>Laura y Víctor</strong></div>
+      <div class="details">
+        <p>El 4 de Agosto del 2024, a las 3 PM</p>
+      </div>
+      <div id="countdown" class="d-flex justify-content-center">
+        <div class="p-2">
+          <h3 id="days">0</h3>
+          <p>Días</p>
+        </div>
+        <div class="p-2">
+          <h3 id="hours">0</h3>
+          <p>Horas</p>
+        </div>
+        <div class="p-2">
+          <h3 id="minutes">0</h3>
+          <p>Minutos</p>
+        </div>
+        <div class="p-2">
+          <h3 id="seconds">0</h3>
+          <p>Segundos</p>
+        </div>
+      </div>
+      <button id="accept-invitation" class="btn btn-primary btn-lg mt-3">Aceptar Invitación</button>
+
+      <!-- Sección direción -->
+      <div class="direccion mt-3">
+        <h3>Ubicación</h3>
+        <p>Calle 12 #70-15</p>
+        <p>Bogotá, Colombia </p>
+      </div>
+      <img src="images/clouds.png" class="img-fluid clouds-bg" alt="Evento Banner">
+    </div>
+
+    <!-- Gift Selection Section -->
+    <div class="gift-selection mt-5" style="display:none;">
+      <h2 class="text-center">Selecciona tu regalo</h2>
+      <div id="gift-list" class="row mt-3">
+        <!-- Gifts will be dynamically loaded here -->
+      </div>
+    </div>
+
+    <!-- Confirmation Section -->
+    <div class="confirmation mt-5 text-center" style="display:none;">
+      <h2>Confirmación</h2>
+      <p id="selected-gift"></p>
+      <button id="confirm-selection" class="btn btn-success btn-lg">Confirmar y Redirigir a WhatsApp</button>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
+    crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/scripts.js"></script>
+</body>
+
+</html>
