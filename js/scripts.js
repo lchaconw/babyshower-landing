@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
   // Inicializar Supabase
+  const phoneNumber = '573224192236';
   const supabaseUrl = 'https://jroeefimocvrxxptnske.supabase.co';
   const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impyb2VlZmltb2N2cnh4cHRuc2tlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjA1NzgzMTMsImV4cCI6MjAzNjE1NDMxM30.JplSWY3j2_9JKBNGnJOAbcXJqjLNl9ms7bGdgwR57_U';
   const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
@@ -10,7 +11,13 @@ document.addEventListener('DOMContentLoaded', function () {
     loadGifts();
   });
 
-  let selectedGift = null;
+  document.getElementById('decline-invitation').addEventListener('click', () => {
+    const message = 'Hola Lau, no podré asistir porque';
+    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+    window.location.href = whatsappUrl;
+  });
+
+  let selectedGifts = [];
 
   async function loadGifts() {
     console.log("Cargando regalos...");
@@ -38,45 +45,75 @@ document.addEventListener('DOMContentLoaded', function () {
       const giftItem = document.createElement('div');
       giftItem.className = 'col-md-4 mb-4';
       giftItem.innerHTML = `
-            <div class="card h-100">
-                <img src="${gift.image}" class="card-img-top" alt="${gift.name}">
-                <div class="card-body text-center">
-                    <h5 class="card-title">${gift.name}</h5>
-                    <button class="btn btn-primary">Seleccionar</button>
-                </div>
+        <div class="card h-100">
+            <img src="${gift.image}" class="card-img-top" alt="${gift.name}">
+            <div class="card-body text-center">
+                <h5 class="card-title">${gift.name}</h5>
+                <button class="btn btn-primary gift-select-btn" data-id="${gift.id}">Seleccionar</button>
             </div>
-        `;
-      giftItem.querySelector('button').addEventListener('click', () => selectGift(gift.id, gift.name));
+        </div>
+      `;
+      giftItem.querySelector('button').addEventListener('click', (e) => toggleGiftSelection(e.target, gift.id, gift.name));
       giftList.appendChild(giftItem);
     });
   }
 
-  async function selectGift(id, name) {
-    selectedGift = { id, name };
+  function toggleGiftSelection(button, id, name) {
+    const giftIndex = selectedGifts.findIndex(gift => gift.id === id);
+    if (giftIndex > -1) {
+      selectedGifts.splice(giftIndex, 1);
+      button.textContent = 'Seleccionar';
+      button.classList.remove('btn-success');
+      button.classList.add('btn-primary');
+    } else {
+      selectedGifts.push({ id, name });
+      button.textContent = 'Seleccionado';
+      button.classList.remove('btn-primary');
+      button.classList.add('btn-success');
+    }
+    console.log("Regalos seleccionados: ", selectedGifts);
+  }
 
-    // Actualizar la disponibilidad del regalo en la base de datos
-    const { data, error } = await supabase
-      .from('gifts')
-      .update({ available: false })
-      .eq('id', id);
-
-    console.log("Actualizo: ", data);
-
-    if (error) {
-      console.error('Error updating gift:', error);
+  document.getElementById('confirm-selection').addEventListener('click', async function () {
+    if (selectedGifts.length === 0) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Oops...',
+        text: 'Por favor, selecciona al menos un regalo antes de confirmar.',
+      });
       return;
     }
 
-    document.querySelector('.gift-selection').style.display = 'none';
-    document.querySelector('.confirmation').style.display = 'block';
-    document.getElementById('selected-gift').innerText = `Has seleccionado: ${name}`;
-  }
+    const updates = selectedGifts.map(gift => {
+      return supabase
+        .from('gifts')
+        .update({ available: false })
+        .eq('id', gift.id);
+    });
 
-  document.getElementById('confirm-selection').addEventListener('click', function () {
-    if (selectedGift) {
-      const message = `Confirmo mi asistencia al evento. He seleccionado el regalo: ${selectedGift.name}.`;
-      const url = `https://wa.me/573224192236?text=${encodeURIComponent(message)}`;
-      window.location.href = url;
+    try {
+      await Promise.all(updates);
+      console.log("Regalos actualizados en la base de datos");
+
+      const message = `Hola Lau, confirmo mi asistencia al evento. He seleccionado los siguientes regalos: ${selectedGifts.map(gift => gift.name).join(', ')}.`;
+      const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+      
+      Swal.fire({
+        icon: 'success',
+        title: '¡Selección confirmada!',
+        text: 'Serás redirigido a WhatsApp para confirmar tu asistencia.',
+        showConfirmButton: false,
+        timer: 2000
+      }).then(() => {
+        window.location.href = url;
+      });
+    } catch (error) {
+      console.error('Error updating gifts:', error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Hubo un problema al actualizar los regalos. Por favor, intenta de nuevo.',
+      });
     }
   });
 
