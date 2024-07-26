@@ -95,7 +95,7 @@ document.addEventListener('DOMContentLoaded', function () {
       await Promise.all(updates);
       console.log("Regalos actualizados en la base de datos");
 
-      const message = `Hola Lau, confirmo mi asistencia al evento. He seleccionado los siguientes regalos: ${selectedGifts.map(gift => gift.name).join(', ')}.`;
+      const message = `Hola Lau, confirmo mi asistencia al evento.`;
       const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
       
       Swal.fire({
