@@ -5,14 +5,27 @@ document.addEventListener('DOMContentLoaded', function () {
   const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impyb2VlZmltb2N2cnh4cHRuc2tlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjA1NzgzMTMsImV4cCI6MjAzNjE1NDMxM30.JplSWY3j2_9JKBNGnJOAbcXJqjLNl9ms7bGdgwR57_U';
   const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-  document.getElementById('accept-invitation').addEventListener('click', function () {
-    document.querySelector('.event-info').style.display = 'none';
-    document.querySelector('.gift-selection').style.display = 'block';
-    loadGifts();
-  });
+  const acceptInvitationButton = document.getElementById('accept-invitation');
+  if (acceptInvitationButton) {
+    acceptInvitationButton.addEventListener('click', function () {
+      document.querySelector('.event-info').style.display = 'none';
+      document.querySelector('.gift-selection').style.display = 'block';
+      loadGifts();
+    });
+  }
+
+  const acceptInvitationRtpButton = document.getElementById('accept-invitation-rtp');
+  if (acceptInvitationRtpButton) {
+    acceptInvitationRtpButton.addEventListener('click', function () {
+      const message = '¡Hola Lau! Gracias por la invitación al baby shower, confirmo mi asistencia. ';
+      const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+
+      window.location.href = whatsappUrl;
+    });
+  }
 
   document.getElementById('decline-invitation').addEventListener('click', () => {
-    const message = 'Hola Lau, no podré asistir porque';
+    const message = '¡Hola! Gracias por invitarme al baby shower. Lamentablemente, no podré asistir ese día…';
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
     window.location.href = whatsappUrl;
   });
@@ -84,41 +97,56 @@ document.addEventListener('DOMContentLoaded', function () {
       return;
     }
 
-    const updates = selectedGifts.map(gift => {
-      return supabase
-        .from('gifts')
-        .update({ available: false })
-        .eq('id', gift.id);
+    const giftNames = selectedGifts.map(gift => gift.name).join(', ');
+
+    Swal.fire({
+      title: 'Confirmación de tu regalo',
+      html: `Has seleccionado: <strong>${giftNames}</strong>`,
+      icon: 'info',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Confirmar',
+      cancelButtonText: 'Cancelar'
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const updates = selectedGifts.map(gift => {
+          return supabase
+            .from('gifts')
+            .update({ available: false })
+            .eq('id', gift.id);
+        });
+
+        try {
+          await Promise.all(updates);
+          console.log("Regalos actualizados en la base de datos");
+
+          const message = `¡Hola! Gracias por la invitación al baby shower, confirmo mi asistencia.`;
+          const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+
+          Swal.fire({
+            icon: 'success',
+            title: '¡Asistencia confirmada!',
+            text: 'Serás redirigido a WhatsApp para confirmar tu asistencia.',
+            showConfirmButton: false,
+            timer: 2000
+          }).then(() => {
+            window.location.href = url;
+          });
+        } catch (error) {
+          console.error('Error updating gifts:', error);
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Hubo un problema al actualizar los regalos. Por favor, intenta de nuevo.',
+          });
+        }
+      }
     });
-
-    try {
-      await Promise.all(updates);
-      console.log("Regalos actualizados en la base de datos");
-
-      const message = `Hola Lau, confirmo mi asistencia al evento.`;
-      const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-      
-      Swal.fire({
-        icon: 'success',
-        title: '¡Selección confirmada!',
-        text: 'Serás redirigido a WhatsApp para confirmar tu asistencia.',
-        showConfirmButton: false,
-        timer: 2000
-      }).then(() => {
-        window.location.href = url;
-      });
-    } catch (error) {
-      console.error('Error updating gifts:', error);
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: 'Hubo un problema al actualizar los regalos. Por favor, intenta de nuevo.',
-      });
-    }
   });
 
   // Countdown Timer
-  const countdownDate = new Date("August 4, 2024 15:00:00").getTime();
+  const countdownDate = new Date("August 4, 2024 11:00:00").getTime();
 
   const countdownFunction = setInterval(() => {
     const now = new Date().getTime();

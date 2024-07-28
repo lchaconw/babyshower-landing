@@ -1,8 +1,37 @@
 body {
     font-family: Arial, sans-serif;
+    background-image: url('../images/fondobby.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    /* Ajusta el color del texto para que sea legible sobre la imagen */
+    color: #ffffff;
 }
 
-.event-info, .gift-selection, .confirmation {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+.subtitle {
+    color: #000000;
+}
+
+.subtitle-big {
+    font-size: 1.4em;
+    color: #000000;
+}
+
+.subtitle {
+    font-size: 1.2em;
+}
+
+.event-info,
+.gift-selection,
+.confirmation {
     margin: 20px;
 }
 
@@ -58,4 +87,34 @@ button:hover {
     top: 300px;
     /* left: 100px; */
     z-index: -1;
+}
+
+.rounded-image {
+    border-radius: 50%;
+    width: 200px;
+    /* Ajusta este valor según el tamaño que desees */
+    height: 200px;
+    /* Debe ser igual al width para formar un círculo perfecto */
+    object-fit: cover;
+    object-position: center;
+    margin: 20px auto;
+    /* Centra la imagen y añade un margen arriba y abajo */
+    display: block;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.6);
+    /* Opcional: añade una sombra suave */
+}
+
+.card {
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.6);
+    /* Opcional: añade una sombra suave */
+}
+
+.my-swal {
+    z-index: 1000000 !important;
+}
+
+@media screen and (max-width: 500px) {
+    .my-swal {
+        width: 90% !important;
+    }
 }
