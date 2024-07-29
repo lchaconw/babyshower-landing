@@ -25,7 +25,23 @@ body {
     background-repeat: no-repeat;
     /* Ajusta el color del texto para que sea legible sobre la imagen */
     color: #ffffff;
+    padding-bottom: 80px;
 }
+
+.fixed-bottom-button {
+    position: fixed;
+    bottom: 1px;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    padding: 10px;
+    background-color: rgba(255, 255, 255, 0.8); /* Fondo semi-transparente */
+  }
+  
+  .fixed-bottom-button button {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra suave */
+  }
+  
 
 h1,
 h2,
