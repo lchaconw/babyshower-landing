@@ -104,8 +104,8 @@ document.addEventListener('DOMContentLoaded', function () {
       html: `Has seleccionado: <strong>${giftNames}</strong>`,
       icon: 'info',
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
+      confirmButtonColor: 'green',
+      cancelButtonColor: 'gray',
       confirmButtonText: 'Confirmar',
       cancelButtonText: 'Cancelar'
     }).then(async (result) => {
@@ -146,7 +146,7 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   // Countdown Timer
-  const countdownDate = new Date("August 4, 2024 11:00:00").getTime();
+  const countdownDate = new Date("August 4, 2024 12:00:00").getTime();
 
   const countdownFunction = setInterval(() => {
     const now = new Date().getTime();

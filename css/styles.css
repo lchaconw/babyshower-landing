@@ -1,5 +1,23 @@
+@font-face {
+    font-family: 'ITCKRIST';
+    src: url('../fonts/ITCKRIST.TTF') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'ADLaMDisplay-Regular';
+    src: url('../fonts/ADLaMDisplay-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.adlam {
+    font-family: 'ADLaMDisplay-Regular', Arial;
+}
+
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'ITCKRIST', Arial;
     background-image: url('../images/fondobby.jpg');
     background-size: cover;
     background-position: center;
@@ -36,7 +54,7 @@ p,
 }
 
 #countdown {
-    background-color: #f8f9fa;
+    /* background-color: #f8f9fa; */
     border-radius: 10px;
     padding: 20px;
     margin-top: 20px;
@@ -109,12 +127,6 @@ button:hover {
     /* Opcional: añade una sombra suave */
 }
 
-.my-swal {
-    z-index: 1000000 !important;
-}
-
-@media screen and (max-width: 500px) {
-    .my-swal {
-        width: 90% !important;
-    }
+.white-shadow {
+    text-shadow: 0 0 10px #ffffff, 0 0 20px #ffffff, 0 0 30px #ffffff;
 }
